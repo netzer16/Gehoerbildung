@@ -1714,7 +1714,7 @@ function leaveFocus(){stopAudio();try{singRelease()}catch(e){}MIDIH=null;examSto
 document.getElementById("leavebtn").addEventListener("click",e=>{const lb=e.currentTarget;if(EX&&!lb._c){lb._c=1;lb.textContent="Wirklich verlassen? Die Übung wird nicht gewertet.";return}leaveFocus()});
 
 /* Feedback */
-const APPV="109",FEEDBACK_MAIL="",FEEDBACK_KEY="",FEEDBACK_URL="https://api.web3forms.com/submit";
+const APPV="115",FEEDBACK_MAIL="",FEEDBACK_KEY="7a9d9366-6e29-479e-9bb4-d63e66945c2a",FEEDBACK_URL="https://api.web3forms.com/submit";
 function showFeedback(){const w=document.getElementById("welcome");w.replaceChildren();w.hidden=false;const close=()=>{w.hidden=true};
  const ty=h("select",{"aria-label":"Art der Rückmeldung"},...["Fehler melden","Wunsch oder Idee","Lob","Frage"].map(x=>h("option",{value:x},x))),tx=h("textarea",{rows:"5","aria-label":"Deine Nachricht",placeholder:"Was ist dir aufgefallen? Bei einem Fehler hilft es, kurz zu schreiben, was du gemacht hast.",style:"width:100%;max-width:560px"});
  const ck=h("input",{type:"checkbox",checked:""}),msg=h("p",{class:"hint",role:"status"});
