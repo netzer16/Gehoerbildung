@@ -1657,7 +1657,7 @@ function setDec(s){try{s=String(s||"");const i=s.indexOf("GB1-");if(i<0)return n
  o.k.forEach(x=>{if(Array.isArray(x)&&MF[x[0]]&&Number.isInteger(x[1])&&x[1]>0&&x[1]<=10&&k.length<14){tot+=x[1];k.push([x[0],x[1],SETK[x[2]]&&setGrp(x[2])===setGrp(o.l)?x[2]:o.l])}});
  if(!k.length||tot>40)return null;
  return{t:String(o.t||"").slice(0,60),l:o.l,s:Number.isInteger(o.s)&&o.s>=0&&o.s<=7200?o.s:0,k,i:SETI.some(x=>x[0]===o.i)?o.i:"klavier",h:SETH.some(x=>x[0]===o.h)?o.h:3,r:o.r?1:0,n:String(o.n||"").slice(0,200)}}catch(e){return null}}
-const SITE_URL="https://netzer16.github.io/gehoerbildung/";
+const SITE_URL="https://netzer16.github.io/Gehoerbildung/";
 function setBase(){try{if(window.top===window&&/^https?:/.test(location.protocol))return location.href.split("#")[0]}catch(e){}return SITE_URL}
 const setLink=code=>setBase()+"#set="+code;
 const setLvN=k=>(LVLS.find(x=>x[0]===k)||[0,k])[1];
