@@ -1715,7 +1715,7 @@ function leaveFocus(){stopAudio();try{singRelease()}catch(e){}MIDIH=null;examSto
 document.getElementById("leavebtn").addEventListener("click",e=>{const lb=e.currentTarget;if(EX&&!lb._c){lb._c=1;lb.textContent="Wirklich verlassen? Die Übung wird nicht gewertet.";return}leaveFocus()});
 
 /* Feedback */
-const APPV="116",FEEDBACK_MAIL="",FEEDBACK_KEY="7a9d9366-6e29-479e-9bb4-d63e66945c2a",FEEDBACK_URL="https://api.web3forms.com/submit";
+const APPV="117",FEEDBACK_MAIL="",FEEDBACK_KEY="7a9d9366-6e29-479e-9bb4-d63e66945c2a",FEEDBACK_URL="https://api.web3forms.com/submit";
 function showFeedback(){const w=document.getElementById("welcome");w.replaceChildren();w.hidden=false;const close=()=>{w.hidden=true};
  const ty=h("select",{"aria-label":"Art der Rückmeldung"},...["Fehler melden","Wunsch oder Idee","Lob","Frage"].map(x=>h("option",{value:x},x))),tx=h("textarea",{rows:"5","aria-label":"Deine Nachricht",placeholder:"Was ist dir aufgefallen? Bei einem Fehler hilft es, kurz zu schreiben, was du gemacht hast.",style:"width:100%;max-width:560px"});
  const ck=h("input",{type:"checkbox",checked:""}),msg=h("p",{class:"hint",role:"status"});
@@ -1764,7 +1764,7 @@ function showAccount(){const w=document.getElementById("welcome");w.replaceChild
  const draw=()=>{const u=ACC.user,box=h("div",{});
   if(!u){box.append(h("p",{},"Mit einem Google-Konto kannst du deinen Lernstand (Statistik, Einstellungen, eigene Karten) auf mehreren Geräten abgleichen. Ohne Konto funktioniert die Seite wie bisher."),
    h("p",{class:"hint"},"Beim Anmelden werden Skripte und Daten von Google geladen und dein Lernstand in einer Cloud-Datenbank von Google (Standort EU) gespeichert. Die Anmeldung ist ab 14 Jahren möglich, jüngere brauchen die Zustimmung der Eltern. Mehr dazu unter Datenschutz."),
-   row(btn("Mit Google anmelden","main",async()=>{ACC.msg="Anmeldefenster wird geöffnet …";draw();try{lsS("gb_acct","1");await accLoad();await ACC.m.au.signInWithPopup(ACC.auth,new ACC.m.au.GoogleAuthProvider());ACC.msg=""}catch(e){ACC.msg=accErr(e);lsD("gb_acct");ACC.loading=null}draw()}),btn("Schließen","",close)))}
+   row(btn("Mit Google anmelden","main",async()=>{if(!ACC.auth){ACC.msg="Google wird geladen. Klicke in einer Sekunde noch einmal.";draw();accLoad().then(()=>{ACC.msg="Bereit. Klicke jetzt auf „Mit Google anmelden“.";draw()},e=>{ACC.msg=accErr(e);ACC.loading=null;draw()});return}try{const pr=ACC.m.au.signInWithPopup(ACC.auth,new ACC.m.au.GoogleAuthProvider());lsS("gb_acct","1");ACC.msg="Anmeldefenster ist offen …";draw();await pr;ACC.msg=""}catch(e){ACC.msg=accErr(e);lsD("gb_acct")}draw()}),btn("Schließen","",close)))}
   else{box.append(h("p",{},"Angemeldet als ",h("strong",{},u.email||u.displayName||"Google-Konto"),"."));
    if(ACC.conflict){const c=ACC.conflict;box.append(row(btn("Cloud-Stand übernehmen","main",()=>accApplyCloud(c)),btn("Diesen Stand hochladen","",async()=>{try{ACC.busy=true;await accPush(ACC.m.fs.doc(ACC.db,"users",ACC.user.uid))}catch(e){accSet(accErr(e))}finally{ACC.busy=false}})),h("p",{class:"hint"},"„Cloud-Stand übernehmen“ ersetzt den Lernstand auf diesem Gerät. „Diesen Stand hochladen“ ersetzt den Stand in der Cloud."))}
    box.append(row(btn("Jetzt synchronisieren","",()=>accSync(true)),btn("Abmelden","",async()=>{try{await ACC.m.au.signOut(ACC.auth)}catch(e){}lsD("gb_acct");lsD("gb_syncts");ACC.user=null;ACC.msg="Abgemeldet. Dein Lernstand bleibt auf diesem Gerät.";accNav();draw()}),btn("Schließen","",close)),
@@ -1773,7 +1773,7 @@ function showAccount(){const w=document.getElementById("welcome");w.replaceChild
     try{await ACC.m.fs.deleteDoc(ACC.m.fs.doc(ACC.db,"users",ACC.user.uid));await ACC.m.au.deleteUser(ACC.user);lsD("gb_acct");lsD("gb_syncts");ACC.user=null;ACC.msg="Konto und Cloud-Daten sind gelöscht. Dein Lernstand bleibt auf diesem Gerät.";accNav()}catch(e){ACC.msg=(e&&e.code==="auth/requires-recent-login")?"Zum Löschen musst du dich frisch anmelden: Melde dich ab, wieder an und klicke dann noch einmal auf Löschen.":accErr(e)}draw()});
    box.append(h("details",{},h("summary",{},"Konto löschen"),h("p",{class:"hint"},"Löscht deinen Cloud-Stand und dein Konto in dieser Seite. Der Lernstand auf diesem Gerät bleibt."),row(del)))}
   box.append(h("p",{class:"hint",role:"status"},ACC.msg||""));w.replaceChildren(h("h2",{},"Konto"),box)};
- ACC.render=draw;draw();w.scrollIntoView({behavior:"smooth",block:"start"})}
+ ACC.render=draw;draw();if(!ACC.user&&!ACC.auth)accLoad().catch(()=>{ACC.loading=null});w.scrollIntoView({behavior:"smooth",block:"start"})}
 if(lsG("gb_acct")==="1"){accLoad().catch(()=>{ACC.loading=null})}
 
 /* Stufen und Bereiche */
